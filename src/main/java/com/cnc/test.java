@@ -2,6 +2,8 @@ package com.cnc;
 
 
 import com.cnc.api.Api;
+import com.cnc.game.Client;
+import com.cnc.game.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,14 +12,18 @@ public class test {
 
     public static void main(String args[]) {
 
-//        String hash = Authorizator.authorize("lwelt2@mailinator.com", "qweqwe123");
-        Api api = new Api("610d51dc-c099-43ee-a8ae-c1510570f992");
-        api.setUrl("https://prodgame08.alliances.commandandconquer.com/16");
-        if (api.openSession()) {
-            System.out.println(api.getServerInfo().get("n"));
-        } else {
-            System.out.println("not ok");
-        }
+//        String hash = Authorizator.authorize("lworld10@mailinator.com", "qweqwe123");
+//        System.out.println(hash);
+//        Api api = new Api(hash);
+
+        Api api = new Api("5270ea7b-c559-47c0-b336-875c662f4a97");
+        api.setUrl("https://prodgame02.alliances.commandandconquer.com/24");
+
+        Server server = new Server(api);
+        Client client = new Client(server);
+
+        client.init();
+        client.close();
 
     }
 }

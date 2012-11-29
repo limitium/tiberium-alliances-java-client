@@ -16,10 +16,8 @@ import java.io.IOException;
 
 public class Api {
     public static final Logger logger = LoggerFactory.getLogger(test.class);
-    private String hash;
-    private String session;
-    private int sequenceId = 0;
-    private int requestId = 0;
+    protected String hash;
+    protected String session;
 
 
     private String url;
@@ -49,78 +47,59 @@ public class Api {
         this.url = url;
     }
 
-    public JSONObject getServers() {
-        String session = this.session;
-        String url = this.url;
-        this.session = hash;
-        this.url = "https://gamecdnorigin.alliances.commandandconquer.com";
-        JSONObject servers = getData("GetOriginAccountInfo", "Farm");
-        this.session = session;
-        this.url = url;
-        return servers;
-    }
-
-    private JSONObject getData(String method) {
+    public JSONObject getData(String method) {
         return getData(method, new JSONObject(), "Presentation");
     }
 
-    private JSONObject getData(String method, String service) {
+    public JSONObject getData(String method, String service) {
         return getData(method, new JSONObject(), service);
     }
 
-    private JSONObject getData(String method, JSONObject params) {
+    public JSONObject getData(String method, JSONObject params) {
         return getData(method, params, "Presentation");
     }
 
-    private JSONObject getData(String method, JSONObject params, String service) {
+    public JSONObject getData(String method, JSONObject params, String service) {
         params.put("session", session);
         String response = crawler.postString(url + "/" + service + "/Service.svc/ajaxEndpoint/" + method, params.toJSONString());
 
         try {
             System.out.println(response);
-            return (JSONObject) parser.parse(response);
+            Object parse = parser.parse(response);
+            String clazz = parse.getClass().getSimpleName();
+            if (!clazz.equals("JSONObject")) {
+                JSONObject json = new JSONObject();
+                json.put("response", parse);
+                parse = json;
+            }
+            return (JSONObject) parse;
         } catch (ParseException e) {
             logger.error(e.getMessage());
         }
         return null;
     }
 
-    public boolean openSession() {
-        this.session = hash;
-        JSONObject params = new JSONObject();
-        params.put("refId", getTime());
-        params.put("reset", true);
-        params.put("version", -1);
-        params.put("platformId", 1);
-        JSONObject resp = getData("OpenSession", params);
-        String session = (String) resp.get("i");
-        if (session != null && session != "00000000-0000-0000-0000-000000000000") {
-            this.session = session;
-            return true;
-        }
-        return false;
-    }
-
-    public JSONObject getServerInfo() {
-        return getData("GetServerInfo");
-    }
-
-    public JSONObject getPlayerInfo() {
-        return getData("GetPlayerInfo");
-    }
-
-    public JSONObject allData() {
-        return poll("WC:A\fCTIME:" + getTime() + "\fCHAT:\fWORLD:\fGIFT:\fACS:0\fASS:0\fCAT:0\f");
-    }
-
-    public JSONObject poll(String request) {
-        JSONObject resp = getData("Poll", request);
-        sequenceId++;
-        requestId++;
-        return resp;
-    }
-
-    private long getTime() {
+    public long getTime() {
         return System.currentTimeMillis();
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setSession(String session) {
+        this.session = session;
+    }
+
+    public String getSession() {
+        return session;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void close() {
+        crawler.close();
     }
 }

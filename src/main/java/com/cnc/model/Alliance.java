@@ -2,11 +2,15 @@ package com.cnc.model;
 
 
 public class Alliance {
-    private int id;
+    private Long id;
     private String name;
 
-    public Alliance(String name, int id) {
+
+    public void setName(String name) {
         this.name = name;
-        this.id = id;
+    }
+
+    public void setId(Long allianceId) {
+        this.id = allianceId;
     }
 }
