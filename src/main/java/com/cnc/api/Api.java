@@ -24,8 +24,11 @@ public class Api {
     private Crawler crawler;
     private JSONParser parser;
 
-    public Api(String hash) {
+    public void setHash(String hash) {
         this.hash = hash;
+    }
+
+    public Api() {
         this.crawler = new Crawler();
         this.parser = new JSONParser();
 
