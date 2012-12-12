@@ -28,8 +28,8 @@ public class Api {
         this.hash = hash;
     }
 
-    public Api() {
-        this.crawler = new Crawler();
+    public Api(Crawler crawler) {
+        this.crawler = crawler;
         this.parser = new JSONParser();
 
         this.crawler.addRequiestInspector(new HttpRequestInterceptor() {
@@ -42,7 +42,6 @@ public class Api {
                 request.removeHeaders("Content-Type");
                 request.addHeader("Content-Type", "application/json; charset=UTF-8");
             }
-
         });
     }
 
@@ -65,9 +64,7 @@ public class Api {
     public JSONObject getData(String method, JSONObject params, String service) {
         params.put("session", session);
         String response = crawler.postString(url + "/" + service + "/Service.svc/ajaxEndpoint/" + method, params.toJSONString());
-
         try {
-            System.out.println(response);
             Object parse = parser.parse(response);
             String clazz = parse.getClass().getSimpleName();
             if (!clazz.equals("JSONObject")) {

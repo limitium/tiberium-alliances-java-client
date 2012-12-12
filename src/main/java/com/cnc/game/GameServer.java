@@ -2,6 +2,7 @@ package com.cnc.game;
 
 import com.cnc.api.Api;
 import com.cnc.api.Authorizator;
+import com.cnc.api.Crawler;
 import com.cnc.model.Server;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -10,11 +11,13 @@ import java.util.ArrayList;
 
 public class GameServer {
     private final Api api;
+    private final Crawler crawler;
     private int sequenceId = 0;
     private int requestId = 0;
 
-    public GameServer(Api api) {
-        this.api = api;
+    public GameServer() {
+        this.crawler = new Crawler();
+        this.api = new Api(crawler);
     }
 
     private JSONObject createRequest(String key, Object val) {
@@ -120,7 +123,7 @@ public class GameServer {
     }
 
     public String updateHash(String username,String password) {
-        String hash = Authorizator.authorize(username,password);
+        String hash = Authorizator.authorize(this.crawler,username,password);
         api.setHash(hash);
         return hash;
     }

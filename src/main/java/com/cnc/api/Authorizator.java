@@ -9,9 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Authorizator {
-    public static String authorize(String username, String password) {
-        Crawler c = new Crawler();
-
+    public static String authorize(Crawler c, String username, String password) {
         c
                 .sendGet("https://www.tiberiumalliances.com/home")
                 .sendGet("https://www.tiberiumalliances.com/login/auth");
@@ -27,7 +25,6 @@ public class Authorizator {
         c.postForm("https://www.tiberiumalliances.com/j_security_check", nvps);
 
         String response = c.get("https://www.tiberiumalliances.com/game/launch");
-
         Pattern pattern = Pattern.compile("<input type=\"hidden\" name=\"sessionId\" value=\"(.*)?\" \\/>");
 
         Matcher matcher = pattern.matcher(response);
