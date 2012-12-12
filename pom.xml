@@ -162,7 +162,6 @@
                 <configuration>
                     <!--<archive>-->
                     <!--<manifest>-->
-                    <!--<mainClass>eu.autovista.vis.features.document.ITextConverter</mainClass>-->
                     <!--</manifest>-->
                     <!--</archive>-->
                     <descriptorRefs>

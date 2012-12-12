@@ -16,21 +16,15 @@ import java.io.IOException;
 
 public class Api {
     public static final Logger logger = LoggerFactory.getLogger(test.class);
+
     protected String hash;
     protected String session;
 
-
     private String url;
     private Crawler crawler;
-    private JSONParser parser;
-
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
 
     public Api(Crawler crawler) {
         this.crawler = crawler;
-        this.parser = new JSONParser();
 
         this.crawler.addRequiestInspector(new HttpRequestInterceptor() {
             public void process(
@@ -43,10 +37,6 @@ public class Api {
                 request.addHeader("Content-Type", "application/json; charset=UTF-8");
             }
         });
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public JSONObject getData(String method) {
@@ -65,7 +55,7 @@ public class Api {
         params.put("session", session);
         String response = crawler.postString(url + "/" + service + "/Service.svc/ajaxEndpoint/" + method, params.toJSONString());
         try {
-            Object parse = parser.parse(response);
+            Object parse = (new JSONParser()).parse(response);
             String clazz = parse.getClass().getSimpleName();
             if (!clazz.equals("JSONObject")) {
                 JSONObject json = new JSONObject();
@@ -83,6 +73,10 @@ public class Api {
         return System.currentTimeMillis();
     }
 
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
     public String getHash() {
         return hash;
     }
@@ -93,6 +87,10 @@ public class Api {
 
     public String getSession() {
         return session;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getUrl() {
