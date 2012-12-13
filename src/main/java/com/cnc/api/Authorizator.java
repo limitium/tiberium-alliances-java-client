@@ -2,6 +2,7 @@ package com.cnc.api;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Authorizator {
+    public static final Logger logger = Logger.getLogger(Authorizator.class);
+
     public static String authorize(String username, String password) {
         Crawler c = new Crawler();
         c
@@ -28,12 +31,14 @@ public class Authorizator {
         String response = c.get("https://www.tiberiumalliances.com/game/launch");
         Pattern pattern = Pattern.compile("<input type=\"hidden\" name=\"sessionId\" value=\"(.*)?\" \\/>");
         Matcher matcher = pattern.matcher(response);
-        String hash = null;
+
         while (matcher.find()) {
-            hash = matcher.group(1);
-            break;
+            String hash = matcher.group(1);
+            logger.info(hash);
+            c.close();
+            return hash;
         }
-        c.close();
-        return hash;
+        logger.warn("Authorization failed.");
+        return null;
     }
 }

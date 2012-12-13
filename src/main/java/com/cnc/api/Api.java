@@ -6,16 +6,16 @@ import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.protocol.HttpContext;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.io.IOException;
 
 public class Api {
-    public static final Logger logger = LoggerFactory.getLogger(test.class);
+    public static final Logger logger = Logger.getLogger(test.class);
 
     protected String hash;
     protected String session;
