@@ -13,16 +13,13 @@ public class test {
     public static final Logger logger = LoggerFactory.getLogger(test.class);
 
     public static void main(String args[]) {
-        Crawler c = new Crawler();
 
-        System.out.println(Authorizator.authorize(c, "lworld10@mailinator.com", "qweqwe123"));
-
-
-//        Api api = new Api(c);
-//        api.setHash("2e9796c9-c57c-4ec7-b27c-b29cab9fe523");
-//        GameServer gameServer = new GameServer();
+//        System.out.println(Authorizator.authorize(new Crawler(), "lworld10@mailinator.com", "qweqwe123"));
+        GameServer gameServer = new GameServer();
+        gameServer.setHash("ef4b582f-dee6-4b68-ab68-d5d24be4e68d");
+//        System.out.println(gameServer.updateHash("lworld10@mailinator.com", "qweqwe123"));
+        System.out.println(gameServer.getServers());
 //        Client client = new Client(gameServer);
-//        client.updateHash("lworld10@mailinator.com", "qweqwe123");
 //        client.getServers();
 ////
 //        client.init();

@@ -9,13 +9,12 @@ import org.json.simple.JSONObject;
 
 public class GameServer {
     private final Api api;
-    private final Crawler crawler;
     private int sequenceId = 0;
     private int requestId = 0;
 
     public GameServer() {
-        this.crawler = new Crawler();
-        this.api = new Api(crawler);
+
+        this.api = new Api();
     }
 
     private JSONObject createRequest(String key, Object val) {
@@ -131,8 +130,12 @@ public class GameServer {
     }
 
     public String updateHash(String username, String password) {
-        String hash = Authorizator.authorize(this.crawler, username, password);
+        String hash = Authorizator.authorize(username, password);
         api.setHash(hash);
         return hash;
+    }
+
+    public void setHash(String hash) {
+        api.setHash(hash);
     }
 }

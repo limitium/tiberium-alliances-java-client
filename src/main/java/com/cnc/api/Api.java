@@ -23,8 +23,8 @@ public class Api {
     private String url;
     private Crawler crawler;
 
-    public Api(Crawler crawler) {
-        this.crawler = crawler;
+    public Api() {
+        this.crawler = new Crawler();
 
         this.crawler.addRequiestInspector(new HttpRequestInterceptor() {
             public void process(
