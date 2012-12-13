@@ -7,8 +7,6 @@ import com.cnc.model.Server;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-
 public class GameServer {
     private final Api api;
     private final Crawler crawler;
@@ -27,19 +25,23 @@ public class GameServer {
     }
 
     public boolean openSession() {
-        api.setSession(api.getHash());
-        JSONObject params = createRequest("refId", api.getTime());
-        params.put("refId", api.getTime());
-        params.put("reset", true);
-        params.put("version", -1);
-        params.put("platformId", 1);
-        JSONObject resp = api.getData("OpenSession", params);
-        String session = (String) resp.get("i");
-        if (session != null && !session.equals("00000000-0000-0000-0000-000000000000")) {
-            api.setSession(session);
-            return true;
+        synchronized (api) {
+            api.setSession(api.getHash());
+            JSONObject params = createRequest("refId", api.getTime());
+            params.put("refId", api.getTime());
+            params.put("reset", true);
+            params.put("version", -1);
+            params.put("platformId", 1);
+            JSONObject resp = api.getData("OpenSession", params);
+            String session = (String) resp.get("i");
+            if (session != null && !session.equals("00000000-0000-0000-0000-000000000000")) {
+                requestId = 0;
+                sequenceId = 0;
+                api.setSession(session);
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 
     public JSONObject getPlayerInfo() {
@@ -51,21 +53,27 @@ public class GameServer {
     }
 
     public JSONArray getServers() {
-        String session = api.getSession();
-        String url = api.getUrl();
-        api.setSession(api.getHash());
-        api.setUrl("https://gamecdnorigin.alliances.commandandconquer.com");
-        JSONObject servers = api.getData("GetOriginAccountInfo", "Farm");
-        api.setSession(session);
-        api.setUrl(url);
-        return (JSONArray) servers.get("Servers");
+        synchronized (api) {
+            String session = api.getSession();
+            String url = api.getUrl();
+            api.setSession(api.getHash());
+            api.setUrl("https://gamecdnorigin.alliances.commandandconquer.com");
+            JSONObject servers = api.getData("GetOriginAccountInfo", "Farm");
+            api.setSession(session);
+            api.setUrl(url);
+            return (JSONArray) servers.get("Servers");
+        }
     }
 
     public JSONObject poll(String request) {
-        JSONObject resp = api.getData("Poll", request);
-        sequenceId++;
-        requestId++;
-        return resp;
+        JSONObject params;
+        synchronized (this) {
+            params = createRequest("requests", request);
+            params.put("requestid", requestId++);
+            params.put("sequenceid", sequenceId++);
+
+        }
+        return api.getData("Poll", params);
     }
 
     public void close() {
@@ -122,8 +130,8 @@ public class GameServer {
         api.setUrl(server.getUrl());
     }
 
-    public String updateHash(String username,String password) {
-        String hash = Authorizator.authorize(this.crawler,username,password);
+    public String updateHash(String username, String password) {
+        String hash = Authorizator.authorize(this.crawler, username, password);
         api.setHash(hash);
         return hash;
     }

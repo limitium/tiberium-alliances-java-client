@@ -116,6 +116,7 @@ public class Crawler {
     private String getEntity(String url) throws IOException {
         HttpGet httpget = new HttpGet(url);
         HttpResponse response = httpclient.execute(httpget, new BasicHttpContext());
+        System.out.println(response.getStatusLine());
         String responseString = EntityUtils.toString(response.getEntity());
         httpget.releaseConnection();
         return responseString;
@@ -125,6 +126,7 @@ public class Crawler {
         HttpPost httpost = new HttpPost(url);
         httpost.setEntity(entity);
         HttpResponse response = httpclient.execute(httpost, new BasicHttpContext());
+        System.out.println(response.getStatusLine());
         String responseString = EntityUtils.toString(response.getEntity());
         httpost.releaseConnection();
         return responseString;

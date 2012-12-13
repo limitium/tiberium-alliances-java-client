@@ -52,8 +52,12 @@ public class Api {
     }
 
     public JSONObject getData(String method, JSONObject params, String service) {
-        params.put("session", session);
-        String response = crawler.postString(url + "/" + service + "/Service.svc/ajaxEndpoint/" + method, params.toJSONString());
+        String url;
+        synchronized (this) {
+            params.put("session", session);
+            url = this.url + "/" + service + "/Service.svc/ajaxEndpoint/" + method;
+        }
+        String response = crawler.postString(url, params.toJSONString());
         try {
             Object parse = (new JSONParser()).parse(response);
             String clazz = parse.getClass().getSimpleName();
