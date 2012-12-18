@@ -29,14 +29,16 @@ public class Authorizator {
         c.postForm("https://www.tiberiumalliances.com/j_security_check", nvps);
 
         String response = c.get("https://www.tiberiumalliances.com/game/launch");
-        Pattern pattern = Pattern.compile("<input type=\"hidden\" name=\"sessionId\" value=\"(.*)?\" \\/>");
-        Matcher matcher = pattern.matcher(response);
+        if (response != null) {
+            Pattern pattern = Pattern.compile("<input type=\"hidden\" name=\"sessionId\" value=\"(.*)?\" \\/>");
+            Matcher matcher = pattern.matcher(response);
 
-        while (matcher.find()) {
-            String hash = matcher.group(1);
-            logger.info(hash);
-            c.close();
-            return hash;
+            while (matcher.find()) {
+                String hash = matcher.group(1);
+                logger.info(hash);
+                c.close();
+                return hash;
+            }
         }
         logger.warn("Authorization failed.");
         return null;

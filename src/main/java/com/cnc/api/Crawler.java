@@ -38,12 +38,14 @@ public class Crawler {
         ConnManagerParams.setMaxTotalConnections(params, 20);
 
         HttpConnectionParams.setConnectionTimeout(params, 5000);
-        HttpConnectionParams.setSoTimeout(params, 1000);
+        HttpConnectionParams.setSoTimeout(params, 10000);
 
         //registers schemes for both http and https
         SchemeRegistry registry = new SchemeRegistry();
         registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-        registry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+        SSLSocketFactory socketFactory = SSLSocketFactory.getSocketFactory();
+        socketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+        registry.register(new Scheme("https", socketFactory, 443));
 
         ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager(params, registry);
 
