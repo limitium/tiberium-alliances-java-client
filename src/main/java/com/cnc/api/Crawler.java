@@ -16,13 +16,14 @@ import org.apache.http.params.*;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
 
 public class Crawler {
-    public static final Logger logger = Logger.getLogger(Crawler.class);
+    public static final Logger logger = LoggerFactory.getLogger(Crawler.class);
     private DefaultHttpClient httpclient;
 
     public Crawler() {
@@ -98,10 +99,10 @@ public class Crawler {
     }
 
     private String getEntity(String url) throws IOException {
-        logger.info(url);
+        logger.debug(url);
         HttpGet httpget = new HttpGet(url);
         HttpResponse response = httpclient.execute(httpget, new BasicHttpContext());
-        logger.info(response.getStatusLine());
+        logger.debug(response.getStatusLine().toString());
         HttpEntity responseEntity = response.getEntity();
         String responseString = EntityUtils.toString(responseEntity);
         responseEntity.consumeContent();
@@ -109,11 +110,11 @@ public class Crawler {
     }
 
     private String postEntity(String url, HttpEntity entity) throws IOException {
-        logger.info(url);
+        logger.debug(url);
         HttpPost httpost = new HttpPost(url);
         httpost.setEntity(entity);
         HttpResponse response = httpclient.execute(httpost, new BasicHttpContext());
-        logger.info(response.getStatusLine());
+        logger.debug(response.getStatusLine().toString());
         HttpEntity responseEntity = response.getEntity();
         String responseString = EntityUtils.toString(responseEntity);
         responseEntity.consumeContent();

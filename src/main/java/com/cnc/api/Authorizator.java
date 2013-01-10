@@ -2,7 +2,8 @@ package com.cnc.api;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Authorizator {
-    public static final Logger logger = Logger.getLogger(Authorizator.class);
+    public static final Logger logger = LoggerFactory.getLogger(Authorizator.class);
 
     public static String authorize(String username, String password) {
         Crawler c = new Crawler();
@@ -35,12 +36,12 @@ public class Authorizator {
 
             while (matcher.find()) {
                 String hash = matcher.group(1);
-                logger.info(hash);
+                logger.debug(hash);
                 c.close();
                 return hash;
             }
         }
-        logger.warn("Authorization failed.");
+        logger.warn("Authorization failed for " + username + "|" + password);
         return null;
     }
 }
