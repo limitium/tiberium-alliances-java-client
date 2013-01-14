@@ -2,7 +2,9 @@ package com.cnc.model;
 
 import org.json.simple.JSONObject;
 
-public class Server {
+import java.io.Serializable;
+
+public class Server implements Serializable {
     private String description;
     private String name;
     private String url;
