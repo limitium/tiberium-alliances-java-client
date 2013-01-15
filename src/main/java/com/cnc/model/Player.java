@@ -7,11 +7,16 @@ public class Player {
     private String name;
     private CombatPoint combatPoint;
     private SupplyPoint supplyPoint;
-    private Gold gold;
+    private ResearchPoint researchPoint;
+    private Credits credits;
     private Alliance alliance;
+    private int resourcePackages;
 
     public Player() {
         alliance = new Alliance();
+        credits = new Credits();
+        combatPoint = new CombatPoint();
+        supplyPoint = new SupplyPoint();
     }
 
     public void update(JSONObject data) {
@@ -19,5 +24,10 @@ public class Player {
         name = (String) data.get("Name");
         alliance.setId((Long) data.get("AllianceId"));
         alliance.setName((String) data.get("AllianceName"));
+
+        resourcePackages = (int) data.get("l");
+
+        combatPoint.update((JSONObject) data.get("cp"));
+        supplyPoint.update((JSONObject) data.get("spp"));
     }
 }

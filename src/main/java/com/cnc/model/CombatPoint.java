@@ -1,16 +1,19 @@
 package com.cnc.model;
 
 
-public class CombatPoint {
-    private int current;
-    private int max;
-    private int s;
-    private int d;
+import org.json.simple.JSONObject;
 
-    public CombatPoint(int current, int max, int s, int d) {
-        this.current = current;
-        this.max = max;
-        this.s = s;
-        this.d = d;
+public class CombatPoint {
+    private long current;
+    private long max;
+    private double d;
+    private long s;
+
+    public void update(JSONObject data) {
+        current = (Long) data.get("b");
+        max = (Long) data.get("m");
+        s = (Long) data.get("s");
+        d = (Long) data.get("d");
     }
+
 }
