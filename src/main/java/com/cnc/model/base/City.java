@@ -18,9 +18,13 @@ public class City {
     private double offenceLevel;
     private HashMap<CityResourceType, CityResource> resources;
     private HashMap<Long, Building> buildings;
+    private HashMap<Long, OffenseUnit> offense;
+    private HashMap<Long, DefenseUnit> defense;
 
     public City() {
         buildings = new HashMap<Long, Building>();
+        offense = new HashMap<Long, OffenseUnit>();
+        defense = new HashMap<Long, DefenseUnit>();
         resources = new HashMap<CityResourceType, CityResource>();
         resources.put(CityResourceType.TIBERIUM, new CityResource());
         resources.put(CityResourceType.CRYSTAL, new CityResource());
@@ -51,8 +55,28 @@ public class City {
             if (buildingType != null) {
                 Building building = new Building();
                 building.update(buildingData);
-                buildings.put(building.getId(),building);
+                buildings.put(building.getId(), building);
             }
+        }
+        offense.clear();
+        defense.clear();
+        for (Object o : (JSONArray) data.get("u")) {
+            JSONObject unitData = (JSONObject) o;
+            Long type = (Long) unitData.get("ui");
+            if (type < 100) {
+                if (OffenseType.get(type) != null) {
+                    OffenseUnit offenseUnit = new OffenseUnit();
+                    offenseUnit.update(unitData);
+                    offense.put(offenseUnit.getId(), offenseUnit);
+                }
+            } else {
+                if (DefenseType.get(type) != null) {
+                    DefenseUnit defenseUnit = new DefenseUnit();
+                    defenseUnit.update(unitData);
+                    defense.put(defenseUnit.getId(), defenseUnit);
+                }
+            }
+
         }
     }
 
