@@ -14,13 +14,14 @@ public class test {
         GameServer gameServer = new GameServer();
         gameServer.setHash(Authorizator.authorize("lworld10@mailinator.com", "qweqwe123"));
         Client client = new Client(gameServer);
-        Server s = client.getServers().get(0);
+        Server s = client.updateServers().get(0);
+
         client.selectServer(s);
         if (!client.openSession()) {
             System.out.println("dafaq");
         }
-
-        Player player = client.updatePlayerData();
+        client.updatePlayerData();
+        client.updateAllData();
         client.close();
 
     }

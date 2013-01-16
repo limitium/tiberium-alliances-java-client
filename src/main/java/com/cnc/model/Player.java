@@ -33,6 +33,7 @@ public class Player {
 
         combatPoint.update((JSONObject) data.get("cp"));
         supplyPoint.update((JSONObject) data.get("spp"));
+        credits.update((JSONObject) data.get("g"));
     }
 
     public long getId() {

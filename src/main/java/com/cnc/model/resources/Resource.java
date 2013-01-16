@@ -4,13 +4,13 @@ import org.json.simple.JSONObject;
 
 
 public class Resource {
-    private long current;
+    private Double current;
     private double d;
     private long s;
 
     public void update(JSONObject data) {
-        current = (Long) data.get("b");
+        current = ((Number) data.get("b")).doubleValue();
         s = (Long) data.get("s");
-        d = (Double) data.get("d");
+        d = ((Number) data.get("d")).doubleValue();
     }
 }

@@ -5,6 +5,7 @@ import com.cnc.model.communication.Message;
 import com.cnc.model.communication.MessageFolder;
 import com.cnc.model.Player;
 import com.cnc.model.Server;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class Client {
 
     public Client(GameServer gameServer) {
         this.gameServer = gameServer;
+        cities = new HashMap<Long, City>();
         player = new Player();
         inbox = new MessageFolder(MessageFolder.IN_FOLDER);
         outbox = new MessageFolder(MessageFolder.OUT_FOLDER);
@@ -73,10 +75,21 @@ public class Client {
         for (Object o : gameServer.allData()) {
             JSONObject containerData = (JSONObject) o;
             String type = containerData.get("t").toString();
-            JSONObject data = (JSONObject) containerData.get("d");
 
+            if (type.equalsIgnoreCase("CITYSUPPORT")) {
+                continue;
+            }
+
+            JSONObject data = (JSONObject) containerData.get("d");
             if (type.equalsIgnoreCase("TIME")) {
                 deltaTime = System.currentTimeMillis() - (Long) data.get("r");
+            }
+            if (type.equalsIgnoreCase("CITIES")) {
+                for (Object co : (JSONArray) data.get("c")) {
+                    City city = new City();
+                    city.update((JSONObject) co);
+                    cities.put(city.getId(), city);
+                }
             }
         }
     }
@@ -95,5 +108,9 @@ public class Client {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public long getDeltaTime() {
+        return deltaTime;
     }
 }
