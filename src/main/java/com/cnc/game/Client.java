@@ -1,18 +1,23 @@
 package com.cnc.game;
 
-import com.cnc.model.Message;
-import com.cnc.model.MessageFolder;
+import com.cnc.model.base.City;
+import com.cnc.model.communication.Message;
+import com.cnc.model.communication.MessageFolder;
 import com.cnc.model.Player;
 import com.cnc.model.Server;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Client {
     private GameServer gameServer;
     private Player player;
+    private HashMap<Long, City> cities;
     private MessageFolder inbox;
     private MessageFolder outbox;
+    private ArrayList<Server> servers;
+    private long deltaTime;
 
     public Client(GameServer gameServer) {
         this.gameServer = gameServer;
@@ -26,8 +31,12 @@ public class Client {
         gameServer.close();
     }
 
-    public void init() {
+    public Player updatePlayerData() {
         player.update(gameServer.getPlayerInfo());
+        return player;
+    }
+
+    private void updateMessageInfo() {
         for (Object fldr : gameServer.igmGetFolders()) {
             JSONObject folder = (JSONObject) fldr;
 
@@ -49,8 +58,8 @@ public class Client {
         }
     }
 
-    public ArrayList<Server> getServers() {
-        ArrayList<Server> servers = new ArrayList<Server>();
+    public ArrayList<Server> updateServers() {
+        servers = new ArrayList<Server>();
         for (Object srv : gameServer.getServers()) {
             Server server = new Server((JSONObject) srv);
             if (server.getLastSeen() > 0) {
@@ -58,6 +67,18 @@ public class Client {
             }
         }
         return servers;
+    }
+
+    public void updateAllData() {
+        for (Object o : gameServer.allData()) {
+            JSONObject containerData = (JSONObject) o;
+            String type = containerData.get("t").toString();
+            JSONObject data = (JSONObject) containerData.get("d");
+
+            if (type.equalsIgnoreCase("TIME")) {
+                deltaTime = System.currentTimeMillis() - (Long) data.get("r");
+            }
+        }
     }
 
     public void selectServer(Server server) {
@@ -70,5 +91,9 @@ public class Client {
 
     public boolean openSession() {
         return gameServer.openSession();
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

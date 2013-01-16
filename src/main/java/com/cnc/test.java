@@ -1,26 +1,27 @@
 package com.cnc;
 
 
-import com.cnc.api.Api;
 import com.cnc.api.Authorizator;
-import com.cnc.api.Crawler;
 import com.cnc.game.Client;
 import com.cnc.game.GameServer;
+import com.cnc.model.Player;
+import com.cnc.model.Server;
 
 public class test {
 
     public static void main(String args[]) {
 
-        System.out.println(Authorizator.authorize("lworld10@mailinator.com", "qweqwe123"));
-//        GameServer gameServer = new GameServer();
-//        gameServer.setHash("ef4b582f-dee6-4b68-ab68-d5d24be4e68d");
-//        System.out.println(gameServer.updateHash("lworld10@mailinator.com", "qweqwe123"));
-//        System.out.println(gameServer.getServers());
-//        Client client = new Client(gameServer);
-//        client.getServers();
-////
-//        client.init();
-//        client.close();
+        GameServer gameServer = new GameServer();
+        gameServer.setHash(Authorizator.authorize("lworld10@mailinator.com", "qweqwe123"));
+        Client client = new Client(gameServer);
+        Server s = client.getServers().get(0);
+        client.selectServer(s);
+        if (!client.openSession()) {
+            System.out.println("dafaq");
+        }
+
+        Player player = client.updatePlayerData();
+        client.close();
 
     }
 }

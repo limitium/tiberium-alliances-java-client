@@ -2,7 +2,6 @@ package com.cnc.game;
 
 import com.cnc.api.Api;
 import com.cnc.api.Authorizator;
-import com.cnc.api.Crawler;
 import com.cnc.model.Server;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -47,8 +46,9 @@ public class GameServer {
         return api.getData("GetPlayerInfo");
     }
 
-    public JSONObject allData() {
-        return poll("WC:A\fCTIME:" + api.getTime() + "\fCHAT:\fWORLD:\fGIFT:\fACS:0\fASS:0\fCAT:0\f");
+    public JSONArray allData() {
+        return (JSONArray) poll("WC:A\fCTIME:" + api.getTime() + "\fCHAT:\fWORLD:\fGIFT:\fACS:0\fASS:0\fCAT:0\f")
+                .get("response");
     }
 
     public JSONArray getServers() {

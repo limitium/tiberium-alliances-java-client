@@ -1,16 +1,20 @@
 package com.cnc.model;
 
+import com.cnc.model.resources.CombatPoint;
+import com.cnc.model.resources.Credits;
+import com.cnc.model.resources.ResearchPoint;
+import com.cnc.model.resources.SupplyPoint;
 import org.json.simple.JSONObject;
 
 public class Player {
-    private Long id;
+    private long id;
     private String name;
     private CombatPoint combatPoint;
     private SupplyPoint supplyPoint;
     private ResearchPoint researchPoint;
     private Credits credits;
     private Alliance alliance;
-    private int resourcePackages;
+    private long resourcePackages;
 
     public Player() {
         alliance = new Alliance();
@@ -25,9 +29,41 @@ public class Player {
         alliance.setId((Long) data.get("AllianceId"));
         alliance.setName((String) data.get("AllianceName"));
 
-        resourcePackages = (int) data.get("l");
+        resourcePackages = (Long) data.get("l");
 
         combatPoint.update((JSONObject) data.get("cp"));
         supplyPoint.update((JSONObject) data.get("spp"));
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public CombatPoint getCombatPoint() {
+        return combatPoint;
+    }
+
+    public SupplyPoint getSupplyPoint() {
+        return supplyPoint;
+    }
+
+    public ResearchPoint getResearchPoint() {
+        return researchPoint;
+    }
+
+    public Credits getCredits() {
+        return credits;
+    }
+
+    public Alliance getAlliance() {
+        return alliance;
+    }
+
+    public long getResourcePackages() {
+        return resourcePackages;
     }
 }

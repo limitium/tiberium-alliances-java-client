@@ -1,4 +1,4 @@
-package com.cnc.model;
+package com.cnc.model.base;
 
 public class Building {
     private int hp;
