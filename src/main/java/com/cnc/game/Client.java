@@ -18,7 +18,7 @@ public class Client {
     private MessageFolder inbox;
     private MessageFolder outbox;
     private ArrayList<Server> servers;
-    private long deltaTime;
+    private static long deltaTime;
 
     public Client(GameServer gameServer) {
         this.gameServer = gameServer;
@@ -82,7 +82,8 @@ public class Client {
 
             JSONObject data = (JSONObject) containerData.get("d");
             if (type.equalsIgnoreCase("TIME")) {
-                deltaTime = System.currentTimeMillis() - (Long) data.get("r");
+//                deltaTime = System.currentTimeMillis() - (Long) data.get("r");
+                deltaTime = (Long) data.get("d");
             }
             if (type.equalsIgnoreCase("CITIES")) {
                 for (Object co : (JSONArray) data.get("c")) {
@@ -110,7 +111,7 @@ public class Client {
         return player;
     }
 
-    public long getDeltaTime() {
-        return deltaTime;
+    public static long getStep() {
+        return System.currentTimeMillis() - deltaTime;
     }
 }

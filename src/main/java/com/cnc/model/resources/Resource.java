@@ -1,5 +1,6 @@
 package com.cnc.model.resources;
 
+import com.cnc.game.Client;
 import org.json.simple.JSONObject;
 
 
@@ -12,5 +13,10 @@ public class Resource {
         current = ((Number) data.get("b")).doubleValue();
         s = (Long) data.get("s");
         d = ((Number) data.get("d")).doubleValue();
+    }
+
+    public double getValue() {
+        long diffSteps = Client.getStep() - s;
+        return diffSteps * d + current;
     }
 }

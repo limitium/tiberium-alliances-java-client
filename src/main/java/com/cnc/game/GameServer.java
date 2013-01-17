@@ -31,12 +31,14 @@ public class GameServer {
             params.put("version", -1);
             params.put("platformId", 1);
             JSONObject resp = api.getData("OpenSession", params);
-            String session = (String) resp.get("i");
-            if (session != null && !session.equals("00000000-0000-0000-0000-000000000000")) {
-                requestId = 0;
-                sequenceId = 0;
-                api.setSession(session);
-                return true;
+            if (resp != null) {
+                String session = (String) resp.get("i");
+                if (session != null && !session.equals("00000000-0000-0000-0000-000000000000")) {
+                    requestId = 0;
+                    sequenceId = 0;
+                    api.setSession(session);
+                    return true;
+                }
             }
             return false;
         }

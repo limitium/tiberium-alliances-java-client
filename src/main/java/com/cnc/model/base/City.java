@@ -7,6 +7,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class City {
     private String name;
@@ -122,5 +123,23 @@ public class City {
 
     public double getOffenceLevel() {
         return offenceLevel;
+    }
+
+    public int getBuildingLimit() {
+        for (Map.Entry<Long, Building> entry : buildings.entrySet()) {
+            Building building = entry.getValue();
+            if (building.getType() == BuildingType.CONSTRUCTION_YARD) {
+                return (int) (building.getLevel() + 15);
+            }
+        }
+        return 0;
+    }
+
+    public HashMap<Long, Building> getBuildings() {
+        return buildings;
+    }
+
+    public CityResource getResources(CityResourceType cityResourceType) {
+        return resources.get(cityResourceType);
     }
 }
