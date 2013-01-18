@@ -15,8 +15,8 @@ public class Resource {
         d = ((Number) data.get("d")).doubleValue();
     }
 
-    public double getValue() {
+    public int getValue() {
         long diffSteps = Client.getStep() - s;
-        return diffSteps * d + current;
+        return (int)(diffSteps * d + current);
     }
 }

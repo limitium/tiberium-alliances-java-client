@@ -18,7 +18,9 @@ public class Client {
     private MessageFolder inbox;
     private MessageFolder outbox;
     private ArrayList<Server> servers;
-    private static long deltaTime;
+    private static long timeDelta = 0;
+    private static long timeStep = 1000;
+    private static long timeResult;
 
     public Client(GameServer gameServer) {
         this.gameServer = gameServer;
@@ -82,8 +84,10 @@ public class Client {
 
             JSONObject data = (JSONObject) containerData.get("d");
             if (type.equalsIgnoreCase("TIME")) {
-//                deltaTime = System.currentTimeMillis() - (Long) data.get("r");
-                deltaTime = (Long) data.get("d");
+//                timeDelta = System.currentTimeMillis() - (Long) data.get("r");
+                timeDelta = (Long) data.get("d");
+                timeStep = (Long) data.get("s");
+                timeResult = (Long) data.get("r");
             }
             if (type.equalsIgnoreCase("CITIES")) {
                 for (Object co : (JSONArray) data.get("c")) {
@@ -91,6 +95,9 @@ public class Client {
                     city.update((JSONObject) co);
                     cities.put(city.getId(), city);
                 }
+            }
+            if (type.equalsIgnoreCase("PLAYER")) {
+                player.update(data);
             }
         }
     }
@@ -111,7 +118,13 @@ public class Client {
         return player;
     }
 
-    public static long getStep() {
-        return System.currentTimeMillis() - deltaTime;
+    public HashMap<Long, City> getCities() {
+        return cities;
     }
+
+    public static long getStep() {
+        return (System.currentTimeMillis() - timeDelta) / 52200;
+    }
+
+
 }

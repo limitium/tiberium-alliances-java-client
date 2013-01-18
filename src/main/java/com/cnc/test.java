@@ -20,8 +20,13 @@ public class test {
         if (!client.openSession()) {
             System.out.println("dafaq");
         }
-        client.updatePlayerData();
         client.updateAllData();
+        //cr 165k
+        //comb 449
+        //supl 180
+        System.out.println(client.getPlayer().getCredits().getValue());
+        System.out.println(client.getPlayer().getCombatPoint().getValue());
+        System.out.println(client.getPlayer().getSupplyPoint().getValue());
         client.close();
 
     }

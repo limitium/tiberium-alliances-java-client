@@ -10,4 +10,8 @@ public class LimitedResource extends Resource {
         super.update(data);
         max = (Long) data.get("m");
     }
+
+    public long getMax() {
+        return max;
+    }
 }

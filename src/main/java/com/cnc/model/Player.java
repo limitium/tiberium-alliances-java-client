@@ -8,13 +8,14 @@ import org.json.simple.JSONObject;
 
 public class Player {
     private long id;
-    private String name;
+    private String name = "";
     private CombatPoint combatPoint;
     private SupplyPoint supplyPoint;
-    private ResearchPoint researchPoint;
+    private long researchPoint;
+    private long rating;
     private Credits credits;
     private Alliance alliance;
-    private long resourcePackages;
+    private String fraction;
 
     public Player() {
         alliance = new Alliance();
@@ -24,16 +25,19 @@ public class Player {
     }
 
     public void update(JSONObject data) {
-        id = (Long) data.get("Id");
-        name = (String) data.get("Name");
-        alliance.setId((Long) data.get("AllianceId"));
-        alliance.setName((String) data.get("AllianceName"));
+        id = (Long) data.get("i");
+        name = (String) data.get("n");
+//        alliance.setId((Long) data.get("AllianceId"));
+//        alliance.setName((String) data.get("AllianceName"));
 
-        resourcePackages = (Long) data.get("l");
 
         combatPoint.update((JSONObject) data.get("cp"));
         supplyPoint.update((JSONObject) data.get("spp"));
-        credits.update((JSONObject) data.get("g"));
+        credits.update((JSONObject) data.get("c"));
+        researchPoint = (Long) data.get("rp");
+
+        fraction =  ((Number)data.get("f")).intValue()==2?"n":"g";
+        rating = (Long) data.get("r");
     }
 
     public long getId() {
@@ -52,7 +56,7 @@ public class Player {
         return supplyPoint;
     }
 
-    public ResearchPoint getResearchPoint() {
+    public long getResearchPoint() {
         return researchPoint;
     }
 
@@ -64,7 +68,11 @@ public class Player {
         return alliance;
     }
 
-    public long getResourcePackages() {
-        return resourcePackages;
+    public long getRating() {
+        return rating;
+    }
+
+    public String getFraction() {
+        return fraction;
     }
 }
