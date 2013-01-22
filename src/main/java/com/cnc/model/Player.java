@@ -2,7 +2,6 @@ package com.cnc.model;
 
 import com.cnc.model.resources.CombatPoint;
 import com.cnc.model.resources.Credits;
-import com.cnc.model.resources.ResearchPoint;
 import com.cnc.model.resources.SupplyPoint;
 import org.json.simple.JSONObject;
 

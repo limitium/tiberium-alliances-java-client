@@ -4,8 +4,8 @@ import com.cnc.api.CncApiException;
 import com.cnc.model.base.City;
 import com.cnc.model.Player;
 import com.cnc.model.Server;
-import com.cnc.model.messaging.Message;
-import com.cnc.model.messaging.MessageFolder;
+import com.cnc.model.communication.Message;
+import com.cnc.model.communication.MessageFolder;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

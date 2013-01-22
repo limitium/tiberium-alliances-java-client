@@ -1,4 +1,4 @@
-package com.cnc.model.messaging;
+package com.cnc.model.communication;
 
 
 import org.json.simple.JSONObject;
