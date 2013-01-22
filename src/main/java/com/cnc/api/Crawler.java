@@ -54,40 +54,21 @@ public class Crawler {
         httpclient = new DefaultHttpClient(cm, params);
     }
 
-    public Crawler sendGet(String url) {
-        try {
-            getEntity(url);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    public Crawler sendGet(String url) throws IOException {
+        getEntity(url);
         return this;
     }
 
-    public String get(String url) {
-        try {
-            return getEntity(url);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        return null;
+    public String get(String url) throws IOException {
+        return getEntity(url);
     }
 
-    public String postForm(String url, List<NameValuePair> params) {
-        try {
-            return postEntity(url, new UrlEncodedFormEntity(params));
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        return null;
+    public String postForm(String url, List<NameValuePair> params) throws IOException {
+        return postEntity(url, new UrlEncodedFormEntity(params));
     }
 
-    public String postString(String url, String params) {
-        try {
-            return postEntity(url, new StringEntity(params));
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        return null;
+    public String postString(String url, String params) throws IOException {
+        return postEntity(url, new StringEntity(params));
     }
 
     public void addRequiestInspector(HttpRequestInterceptor inspector) {

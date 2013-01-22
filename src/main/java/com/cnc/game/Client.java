@@ -1,10 +1,11 @@
 package com.cnc.game;
 
+import com.cnc.api.CncApiException;
 import com.cnc.model.base.City;
-import com.cnc.model.communication.Message;
-import com.cnc.model.communication.MessageFolder;
 import com.cnc.model.Player;
 import com.cnc.model.Server;
+import com.cnc.model.messaging.Message;
+import com.cnc.model.messaging.MessageFolder;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -22,8 +23,8 @@ public class Client {
     private static long timeStep = 1000;
     private static long timeResult;
 
-    public Client(GameServer gameServer) {
-        this.gameServer = gameServer;
+    public Client() {
+        gameServer = new GameServer();
         cities = new HashMap<Long, City>();
         player = new Player();
         inbox = new MessageFolder(MessageFolder.IN_FOLDER);
@@ -35,12 +36,12 @@ public class Client {
         gameServer.close();
     }
 
-    public Player updatePlayerData() {
+    public Player updatePlayerData() throws CncApiException {
         player.update(gameServer.getPlayerInfo());
         return player;
     }
 
-    private void updateMessageInfo() {
+    private void updateMessageInfo() throws CncApiException {
         for (Object fldr : gameServer.igmGetFolders()) {
             JSONObject folder = (JSONObject) fldr;
 
@@ -53,7 +54,7 @@ public class Client {
         }
     }
 
-    private void updateIGMFolder(MessageFolder folder, JSONObject data) {
+    private void updateIGMFolder(MessageFolder folder, JSONObject data) throws CncApiException {
         folder.update(data);
         folder.setCount(gameServer.igmGetMsgCount(folder.getId()));
         for (Object msg : gameServer.igmGetMsgHeader(folder.getId(), 0, 15)) {
@@ -62,7 +63,7 @@ public class Client {
         }
     }
 
-    public ArrayList<Server> updateServers() {
+    public ArrayList<Server> updateServers() throws CncApiException {
         servers = new ArrayList<Server>();
         for (Object srv : gameServer.getServers()) {
             Server server = new Server((JSONObject) srv);
@@ -73,7 +74,7 @@ public class Client {
         return servers;
     }
 
-    public void updateAllData() {
+    public void updateAllData() throws CncApiException {
         for (Object o : gameServer.allData()) {
             JSONObject containerData = (JSONObject) o;
             String type = containerData.get("t").toString();
@@ -106,12 +107,16 @@ public class Client {
         gameServer.selectServer(server);
     }
 
-    public String updateHash(String username, String password) {
+    public String updateHash(String username, String password) throws CncApiException {
         return gameServer.updateHash(username, password);
     }
 
-    public boolean openSession() {
+    public boolean openSession() throws CncApiException {
         return gameServer.openSession();
+    }
+
+    public void setHash(String hash) {
+        gameServer.setHash(hash);
     }
 
     public Player getPlayer() {
@@ -125,6 +130,5 @@ public class Client {
     public static long getStep() {
         return (System.currentTimeMillis() - timeDelta) / 52200;
     }
-
 
 }

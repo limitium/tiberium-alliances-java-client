@@ -40,25 +40,33 @@ public class Api {
         });
     }
 
-    public JSONObject getData(String method) {
+    public JSONObject getData(String method) throws CncApiException {
         return getData(method, new JSONObject(), "Presentation");
     }
 
-    public JSONObject getData(String method, String service) {
+    public JSONObject getData(String method, String service) throws CncApiException {
         return getData(method, new JSONObject(), service);
     }
 
-    public JSONObject getData(String method, JSONObject params) {
+    public JSONObject getData(String method, JSONObject params) throws CncApiException {
         return getData(method, params, "Presentation");
     }
 
-    public JSONObject getData(String method, JSONObject params, String service) {
+    public JSONObject getData(String method, JSONObject params, String service) throws CncApiException {
         String url;
         synchronized (this) {
             params.put("session", session);
             url = this.url + "/" + service + "/Service.svc/ajaxEndpoint/" + method;
         }
-        String response = crawler.postString(url, params.toJSONString());
+        String response = null;
+        try {
+            response = crawler.postString(url, params.toJSONString());
+        } catch (IOException e) {
+            throw new CncApiException("Crawler error", e);
+        }
+        if (response == null) {
+            throw new CncApiException("Response from server is null");
+        }
         try {
             Object parse = (new JSONParser()).parse(response);
             String clazz = parse.getClass().getSimpleName();
@@ -69,9 +77,8 @@ public class Api {
             }
             return (JSONObject) parse;
         } catch (ParseException e) {
-            logger.error(e.getMessage());
+            throw new CncApiException("Parse data fail", e);
         }
-        return null;
     }
 
     public long getTime() {

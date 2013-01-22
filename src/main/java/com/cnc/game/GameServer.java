@@ -2,6 +2,7 @@ package com.cnc.game;
 
 import com.cnc.api.Api;
 import com.cnc.api.Authorizator;
+import com.cnc.api.CncApiException;
 import com.cnc.model.Server;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -22,7 +23,7 @@ public class GameServer {
         return params;
     }
 
-    public boolean openSession() {
+    public boolean openSession() throws CncApiException {
         synchronized (api) {
             api.setSession(api.getHash());
             JSONObject params = createRequest("refId", api.getTime());
@@ -31,29 +32,27 @@ public class GameServer {
             params.put("version", -1);
             params.put("platformId", 1);
             JSONObject resp = api.getData("OpenSession", params);
-            if (resp != null) {
-                String session = (String) resp.get("i");
-                if (session != null && !session.equals("00000000-0000-0000-0000-000000000000")) {
-                    requestId = 0;
-                    sequenceId = 0;
-                    api.setSession(session);
-                    return true;
-                }
+            String session = (String) resp.get("i");
+            if (session != null && !session.equals("00000000-0000-0000-0000-000000000000")) {
+                requestId = 0;
+                sequenceId = 0;
+                api.setSession(session);
+                return true;
             }
             return false;
         }
     }
 
-    public JSONObject getPlayerInfo() {
+    public JSONObject getPlayerInfo() throws CncApiException {
         return api.getData("GetPlayerInfo");
     }
 
-    public JSONArray allData() {
+    public JSONArray allData() throws CncApiException {
         return (JSONArray) poll("WC:A\fCTIME:" + api.getTime() + "\fCHAT:\fWORLD:\fGIFT:\fACS:0\fASS:0\fCAT:0\f")
                 .get("response");
     }
 
-    public JSONArray getServers() {
+    public JSONArray getServers() throws CncApiException {
         synchronized (api) {
             String session = api.getSession();
             String url = api.getUrl();
@@ -66,7 +65,7 @@ public class GameServer {
         }
     }
 
-    public JSONObject poll(String request) {
+    public JSONObject poll(String request) throws CncApiException {
         JSONObject params;
         synchronized (this) {
             params = createRequest("requests", request);
@@ -81,19 +80,19 @@ public class GameServer {
         api.close();
     }
 
-    public boolean checkPlayerExist(String name) {
+    public boolean checkPlayerExist(String name) throws CncApiException {
         return (Boolean) api.getData("CheckPlayerExist", createRequest("name", name)).get("response");
     }
 
-    public JSONArray igmGetFolders() {
+    public JSONArray igmGetFolders() throws CncApiException {
         return (JSONArray) api.getData("IGMGetFolders").get("response");
     }
 
-    public long igmGetMsgCount(long folderId) {
+    public long igmGetMsgCount(long folderId) throws CncApiException {
         return (Long) api.getData("IGMGetMsgCount", createRequest("folderId", folderId)).get("response");
     }
 
-    public JSONArray igmGetMsgHeader(long folderId, int skip, int limit) {
+    public JSONArray igmGetMsgHeader(long folderId, int skip, int limit) throws CncApiException {
         JSONObject params = createRequest("folder", folderId);
         params.put("skip", skip);
         params.put("take", limit);
@@ -102,24 +101,24 @@ public class GameServer {
         return (JSONArray) api.getData("IGMGetMsgHeader", params).get("response");
     }
 
-    public String igmGetMsg(int mailId) {
+    public String igmGetMsg(int mailId) throws CncApiException {
         return (String) api.getData("IGMGetMsg", createRequest("mailId", mailId)).get("response");
     }
 
-    public boolean igmSetReadFlag(Integer[] mailIds) {
+    public boolean igmSetReadFlag(Integer[] mailIds) throws CncApiException {
         JSONObject params = createRequest("flag", true);
         params.put("msgIds", mailIds);
         return (Boolean) api.getData("IGMSetReadFlag", params).get("response");
     }
 
-    public int igmBulkDeleteMsg(int folderId, Integer[] mailIds) {
+    public int igmBulkDeleteMsg(int folderId, Integer[] mailIds) throws CncApiException {
         JSONObject params = createRequest("a", false);
         params.put("f", folderId);
         params.put("ids", mailIds);
         return (Integer) api.getData("IGMBulkDeleteMsg", params).get("response");
     }
 
-    public Integer[] igmBulkSendMsg(String subject, String players, String body, String alliances) {
+    public Integer[] igmBulkSendMsg(String subject, String players, String body, String alliances) throws CncApiException {
         JSONObject params = createRequest("alliances", alliances);
         params.put("subject", subject);
         params.put("body", body);
@@ -131,7 +130,7 @@ public class GameServer {
         api.setUrl(server.getUrl());
     }
 
-    public String updateHash(String username, String password) {
+    public String updateHash(String username, String password) throws CncApiException {
         String hash = Authorizator.authorize(username, password);
         api.setHash(hash);
         return hash;
