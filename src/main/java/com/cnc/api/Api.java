@@ -62,7 +62,7 @@ public class Api {
         try {
             response = crawler.postString(url, params.toJSONString());
         } catch (IOException e) {
-            throw new CncApiException("Crawler error", e);
+            throw new CncApiException("Crawler error: " + e.getMessage(), e);
         }
         if (response == null) {
             throw new CncApiException("Response from server is null");

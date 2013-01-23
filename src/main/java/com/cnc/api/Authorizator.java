@@ -41,7 +41,7 @@ public class Authorizator {
             Authorizator.step(4, "Get launcher", progress);
             response = c.get("https://www.tiberiumalliances.com/game/launch");
         } catch (IOException e) {
-            throw new CncApiException("Crawler error", e);
+            throw new CncApiException("Crawler error: " + e.getMessage(), e);
         }
         if (response == null) {
             throw new CncApiException("Empty launcher");
@@ -57,7 +57,6 @@ public class Authorizator {
             return hash;
         }
 
-        logger.warn("Authorization failed for " + username + "|" + password);
         throw new CncApiException("Authorization failed for " + username + "|" + password);
     }
 
