@@ -48,7 +48,7 @@ public class GameServer {
     }
 
     public JSONArray allData() throws CncApiException {
-        return (JSONArray) poll("WC:A\fCTIME:" + api.getTime() + "\fCHAT:\fWORLD:\fGIFT:\fACS:0\fASS:0\fCAT:0\f")
+        return (JSONArray) poll("WC:A\fTIME:" + api.getTime() + "\fCHAT:\fWORLD:\fGIFT:\fACS:0\fASS:0\fCAT:0\f")
                 .get("response");
     }
 

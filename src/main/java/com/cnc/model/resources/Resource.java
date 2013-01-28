@@ -16,7 +16,7 @@ public class Resource {
     }
 
     public int getValue() {
-        long diffSteps = Client.getStep() - s;
-        return (int)(diffSteps * d + current);
+        double diffSteps = Client.getStep() - s;
+        return (int) (diffSteps * d + current);
     }
 }

@@ -138,8 +138,4 @@ public class City {
     public HashMap<Long, Building> getBuildings() {
         return buildings;
     }
-
-    public CityResource getResources(CityResourceType cityResourceType) {
-        return resources.get(cityResourceType);
-    }
 }

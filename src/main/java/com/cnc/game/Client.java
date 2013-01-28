@@ -19,9 +19,9 @@ public class Client {
     private MessageFolder inbox;
     private MessageFolder outbox;
     private ArrayList<Server> servers;
-    private static long timeDelta = 0;
-    private static long timeStep = 1000;
-    private static long timeResult;
+    private static long timeD = 0;
+    private static long timeS = 0;
+    private static long timeR = 0;
 
     public Client() {
         gameServer = new GameServer();
@@ -85,10 +85,9 @@ public class Client {
 
             JSONObject data = (JSONObject) containerData.get("d");
             if (type.equalsIgnoreCase("TIME")) {
-//                timeDelta = System.currentTimeMillis() - (Long) data.get("r");
-                timeDelta = (Long) data.get("d");
-                timeStep = (Long) data.get("s");
-                timeResult = (Long) data.get("r");
+                timeD = (Long) data.get("d");
+                timeS = (Long) data.get("s");
+                timeR = (Long) data.get("r");
             }
             if (type.equalsIgnoreCase("CITIES")) {
                 for (Object co : (JSONArray) data.get("c")) {
@@ -127,8 +126,8 @@ public class Client {
         return cities;
     }
 
-    public static long getStep() {
-        return (System.currentTimeMillis() - timeDelta) / 52200;
+    public static double getStep() {
+        return Math.floor((System.currentTimeMillis() - timeD - timeR) / timeS);
     }
 
 }
