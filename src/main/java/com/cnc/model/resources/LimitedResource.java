@@ -14,4 +14,10 @@ public class LimitedResource extends Resource {
     public long getMax() {
         return max;
     }
+
+    @Override
+    public int getValue() {
+        int currentValue = super.getValue();
+        return currentValue > max ? (int) Math.max(base, max) : currentValue;
+    }
 }

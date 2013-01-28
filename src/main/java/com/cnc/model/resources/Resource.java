@@ -5,18 +5,18 @@ import org.json.simple.JSONObject;
 
 
 public class Resource {
-    private Double current;
-    private double d;
-    private long s;
+    protected Double base;
+    protected double delta;
+    protected long step;
 
     public void update(JSONObject data) {
-        current = ((Number) data.get("b")).doubleValue();
-        s = (Long) data.get("s");
-        d = ((Number) data.get("d")).doubleValue();
+        base = ((Number) data.get("b")).doubleValue();
+        step = (Long) data.get("s");
+        delta = ((Number) data.get("d")).doubleValue();
     }
 
     public int getValue() {
-        double diffSteps = Client.getStep() - s;
-        return (int) (diffSteps * d + current);
+        double diffSteps = Client.getStep() - step;
+        return (int) (diffSteps * delta + base);
     }
 }
