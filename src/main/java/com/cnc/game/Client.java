@@ -26,6 +26,7 @@ public class Client {
     public Client() {
         gameServer = new GameServer();
         cities = new HashMap<Long, City>();
+        servers = new ArrayList<Server>();
         player = new Player();
         inbox = new MessageFolder(MessageFolder.IN_FOLDER);
         outbox = new MessageFolder(MessageFolder.OUT_FOLDER);
@@ -64,8 +65,11 @@ public class Client {
     }
 
     public ArrayList<Server> updateServers() throws CncApiException {
-        servers = new ArrayList<Server>();
-        for (Object srv : gameServer.getServers()) {
+        JSONArray responseServers = gameServer.getServers();
+        if (responseServers == null) {
+            throw new CncApiException("Empty servers list.");
+        }
+        for (Object srv : responseServers) {
             Server server = new Server((JSONObject) srv);
             if (server.getLastSeen() > 0) {
                 servers.add(server);
