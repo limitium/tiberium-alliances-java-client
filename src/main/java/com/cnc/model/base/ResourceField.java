@@ -11,4 +11,16 @@ public class ResourceField {
         this.y = y;
         this.type = resourceFieldType;
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public ResourceFieldType getType() {
+        return type;
+    }
 }
