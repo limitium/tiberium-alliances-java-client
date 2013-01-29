@@ -65,6 +65,7 @@ public class Client {
     }
 
     public ArrayList<Server> updateServers() throws CncApiException {
+        servers.clear();
         JSONArray responseServers = gameServer.getServers();
         if (responseServers == null) {
             throw new CncApiException("Empty servers list.");
