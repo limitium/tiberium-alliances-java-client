@@ -95,6 +95,7 @@ public class Client {
                 timeR = (Long) data.get("r");
             }
             if (type.equalsIgnoreCase("CITIES")) {
+                cities.clear();
                 for (Object co : (JSONArray) data.get("c")) {
                     City city = new City();
                     city.update((JSONObject) co);
