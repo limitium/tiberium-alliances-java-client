@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class City {
+    private final int MAX_X_BUILDING = 9;
+    private final int MAX_Y_BUILDING = 8;
     private String name;
     private long id;
     private long x;
@@ -21,6 +23,7 @@ public class City {
     private HashMap<Long, Building> buildings;
     private HashMap<Long, OffenseUnit> offense;
     private HashMap<Long, DefenseUnit> defense;
+    private ResourceField[][] resourceFields;
 
     public City() {
         buildings = new HashMap<Long, Building>();
@@ -78,6 +81,24 @@ public class City {
                 }
             }
 
+        }
+        int y = 0;
+        resourceFields = new ResourceField[MAX_X_BUILDING][MAX_Y_BUILDING];
+        for (Object o : (JSONArray) data.get("l")) {
+            if (y > MAX_Y_BUILDING) {
+                break;
+            }
+            long stored = (Long) o;
+            if (stored > 0) {
+                for (int x = 0; x < MAX_X_BUILDING; x++) {
+                    long code = (stored >> (3 * x)) & 0x7;
+                    if (code > 0) {
+                        ResourceFieldType resourceFieldType = ResourceFieldType.get(code);
+                        resourceFields[x][y] = new ResourceField(x, y, resourceFieldType);
+                    }
+                }
+            }
+            y++;
         }
     }
 
@@ -137,5 +158,9 @@ public class City {
 
     public HashMap<Long, Building> getBuildings() {
         return buildings;
+    }
+
+    public ResourceField getResourceFiled(int x, int y) {
+        return resourceFields[x][y];
     }
 }

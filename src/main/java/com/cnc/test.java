@@ -1,6 +1,7 @@
 package com.cnc;
 
 
+import com.cnc.api.Authorizator;
 import com.cnc.api.CncApiException;
 import com.cnc.game.Client;
 import com.cnc.model.Server;
@@ -14,8 +15,8 @@ public class test {
     public static void main(String args[]) throws CncApiException {
 
         Client client = new Client();
-//        client.setHash(Authorizator.authorize("lworld10@mailinator.com", "qweqwe123"));
-        client.setHash("6d3f3822-90d2-454e-83b7-a3a80f645b2f");
+        client.setHash(Authorizator.authorize("lworld10@mailinator.com", "qweqwe123"));
+//        client.setHash("6d3f3822-90d2-454e-83b7-a3a80f645b2f");
         client.updateServers();
 
 
