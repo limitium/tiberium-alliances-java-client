@@ -1,9 +1,10 @@
 package com.cnc.game;
 
 import com.cnc.api.CncApiException;
-import com.cnc.model.base.City;
+import com.cnc.model.Alliance;
 import com.cnc.model.Player;
 import com.cnc.model.Server;
+import com.cnc.model.base.City;
 import com.cnc.model.communication.Message;
 import com.cnc.model.communication.MessageFolder;
 import org.json.simple.JSONArray;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 public class Client {
     private GameServer gameServer;
     private Player player;
+    private Alliance alliance;
     private HashMap<Long, City> cities;
     private MessageFolder inbox;
     private MessageFolder outbox;
@@ -28,6 +30,7 @@ public class Client {
         cities = new HashMap<Long, City>();
         servers = new ArrayList<Server>();
         player = new Player();
+        alliance = new Alliance();
         inbox = new MessageFolder(MessageFolder.IN_FOLDER);
         outbox = new MessageFolder(MessageFolder.OUT_FOLDER);
 
@@ -104,6 +107,9 @@ public class Client {
             }
             if (type.equalsIgnoreCase("PLAYER")) {
                 player.update(data);
+            }
+            if (type.equalsIgnoreCase("ALLIANCE")) {
+                alliance.update(data);
             }
         }
     }
